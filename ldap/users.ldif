@@ -1,0 +1,23 @@
+# Estructura base
+dn: ou=users,dc=iesluisvives,dc=org
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=iesluisvives,dc=org
+objectClass: organizationalUnit
+ou: groups
+
+# Usuario Alumno 1
+dn: uid=alumno1,ou=users,dc=iesluisvives,dc=org
+objectClass: inetOrgPerson
+uid: alumno1
+cn: Alumno Uno
+sn: Vives
+mail: alumno1@iesluisvives.org
+userPassword: LuisVives123!
+
+# Grupo Alumnos
+dn: cn=alumnos,ou=groups,dc=iesluisvives,dc=org
+objectClass: groupOfNames
+cn: alumnos
+member: uid=alumno1,ou=users,dc=iesluisvives,dc=org

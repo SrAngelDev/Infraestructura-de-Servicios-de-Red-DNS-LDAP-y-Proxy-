@@ -1,0 +1,102 @@
+services:
+  # --- DNS ---
+  dns:
+    image: ubuntu/bind9:latest
+    container_name: dns_server
+    volumes:
+      - ./dns/named.conf.local:/etc/bind/named.conf.local:ro
+      - ./dns/db.iesluisvives.org:/etc/bind/zones/db.iesluisvives.org:ro
+      - ./dns/db.192.168.200:/etc/bind/zones/db.192.168.200:ro
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.2
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+
+  # --- LDAP ---
+  ldap:
+    build: ./ldap
+    container_name: ldap_server
+    environment:
+      - LDAP_DOMAIN=iesluisvives.org
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_ORGANISATION="IES Luis Vives"
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.3
+    ports:
+      - "389:389"
+    dns:
+      - 192.168.200.2
+    depends_on:
+      - dns
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+    depends_on:
+      - ldap
+    networks:
+      - vives-net
+    ports:
+      - "8080:80"
+    dns:
+      - 192.168.200.2
+
+  # --- Backend DAW (Nginx) ---
+  backend-daw:
+    image: nginx:alpine
+    container_name: server_daw
+    volumes:
+      - ./backend-daw:/usr/share/nginx/html:ro
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.20
+    dns:
+      - 192.168.200.2
+    depends_on:
+      - dns
+
+  # --- Backend DAM (Apache) ---
+  backend-dam:
+    build: ./backend-dam
+    container_name: server_dam
+    volumes:
+      - ./backend-dam:/usr/local/apache2/htdocs:ro
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.30
+    dns:
+      - 192.168.200.2
+    depends_on:
+      - dns
+      - ldap
+
+  # --- Proxy Inverso (Nginx) ---
+  proxy:
+    image: bitnami/nginx:latest 
+    container_name: proxy_main
+    volumes:
+      - ./nginx-proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/my_server_block.conf:ro
+      - ./nginx-proxy/.htpasswd:/opt/bitnami/nginx/conf/.htpasswd:ro
+    ports:
+      - "80:8080"
+    depends_on:
+      - backend-daw
+      - backend-dam
+      - ldap
+      - dns
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.10
+    dns:
+      - 192.168.200.2
+
+networks:
+  vives-net:
+    ipam:
+      config:
+        - subnet: 192.168.200.0/24

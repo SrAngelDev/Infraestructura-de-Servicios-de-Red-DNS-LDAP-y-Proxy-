@@ -1,0 +1,9 @@
+zone "iesluisvives.org" {
+    type master;
+    file "/etc/bind/zones/db.iesluisvives.org";
+};
+
+zone "200.168.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/zones/db.192.168.200";
+};

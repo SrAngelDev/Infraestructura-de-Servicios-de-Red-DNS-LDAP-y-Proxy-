@@ -1,0 +1,14 @@
+# Basado en 6.4.2.2 - Supuesto Práctico
+AuthName "Acceso Restringido - Alumnos DAM"
+AuthType Basic
+AuthBasicProvider ldap
+
+# URL de conexión al LDAP (usar nombre del servicio, no IP)
+AuthLDAPURL "ldap://ldap:389/ou=users,dc=iesluisvives,dc=org?uid?sub?(objectClass=inetOrgPerson)"
+
+# Usuario admin para leer el directorio
+AuthLDAPBindDN "cn=admin,dc=iesluisvives,dc=org"
+AuthLDAPBindPassword "admin"
+
+# Requerir usuario válido
+Require valid-user

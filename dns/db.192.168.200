@@ -1,0 +1,17 @@
+; Zona Inversa para 192.168.200.x
+$TTL    86400
+@       IN      SOA     ns1.iesluisvives.org. admin.iesluisvives.org. (
+                        2026012901 ; Serial
+                        3600       ; Refresh
+                        1800       ; Retry
+                        604800     ; Expire
+                        86400 )    ; Minimum
+;
+@       IN      NS      ns1.iesluisvives.org.
+
+; Registros PTR (Resolución Inversa)
+2       IN      PTR     ns1.iesluisvives.org.
+3       IN      PTR     ldap.iesluisvives.org.
+10      IN      PTR     proxy.iesluisvives.org.
+20      IN      PTR     daw.iesluisvives.org.
+30      IN      PTR     dam.iesluisvives.org.

@@ -1,0 +1,26 @@
+; Zona Directa para iesluisvives.org
+$TTL    86400
+@       IN      SOA     ns1.iesluisvives.org. admin.iesluisvives.org. (
+                        2026012901 ; Serial (Formato: AAAAMMDDNN)
+                        3600       ; Refresh (1 hora)
+                        1800       ; Retry (30 minutos)
+                        604800     ; Expire (1 semana)
+                        86400 )    ; Minimum TTL (1 día)
+;
+; Servidor de Nombres
+@       IN      NS      ns1.iesluisvives.org.
+
+; Registros A (Mapeo Nombre -> IPv4)
+ns1     IN      A       192.168.200.2   ; DNS Server
+dns     IN      A       192.168.200.2   ; Alias del DNS
+ldap    IN      A       192.168.200.3   ; LDAP Server
+proxy   IN      A       192.168.200.10  ; Proxy Inverso
+daw     IN      A       192.168.200.20  ; Backend DAW (Nginx)
+dam     IN      A       192.168.200.30  ; Backend DAM (Apache)
+
+; El dominio principal apunta al Proxy (puerta de entrada)
+@       IN      A       192.168.200.10
+
+; Alias (CNAME)
+www     IN      CNAME   proxy           ; www.iesluisvives.org -> proxy
+web     IN      CNAME   proxy           ; web.iesluisvives.org -> proxy
