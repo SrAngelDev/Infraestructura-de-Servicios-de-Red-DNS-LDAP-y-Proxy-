@@ -340,6 +340,13 @@ dwec    IN      A       192.168.200.40
 
 ---
 
-**Diagrama actualizado:** 29 de enero de 2026  
+**Diagrama actualizado:** 30 de enero de 2026  
 **Práctica:** 03 - Servicios de Red  
 **IES Luis Vives - Ciclo DAW**
+
+<div align="center">
+
+**Hecho con ❤️ y ☕ por Ángel Sánchez Gasanz**
+
+
+</div>

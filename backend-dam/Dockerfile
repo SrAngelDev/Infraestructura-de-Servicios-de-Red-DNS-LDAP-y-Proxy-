@@ -6,5 +6,5 @@ RUN sed -i \
     -e 's/^#\(LoadModule rewrite_module modules\/mod_rewrite.so\)/\1/' \
     conf/httpd.conf
 
-# Permitir .htaccess (AllowOverride All)
+# Permitir .htaccess
 RUN sed -i '/<Directory "\/usr\/local\/apache2\/htdocs">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' conf/httpd.conf
